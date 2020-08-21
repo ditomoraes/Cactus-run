@@ -2,7 +2,7 @@
 // 2 - Draw the Dino -> OK
 // 3 - Make Dino move up and down -> NOT OK
 // 4 - Create obstacles -> OK
-// 5 - Move the obstacles 
+// 5 - Move the obstacles
 // 6 - Create point dashboard -> OK
 // 7 - Collision logic
 //  8 - Game over
@@ -30,25 +30,27 @@ class Game {
     this.runwaySpeed = 10;
     this.gravity = 0.5;
     this.dinoSpeed = {
-      initialSpeed: 0,
-      speedIncrement: 1.5,
+      initialSpeed: 30,
     };
     this.frames = 0;
     this.score = {
       points: 0,
       pointsIncrementFPS: 30,
     };
+    this.isGameOver = false;
+    this.animationId = 0;
+    this.moveDinoDown = false;
   }
 
   configureKeyboardControls() {
     document.onkeydown = (event) => {
-      this.dinoSpeed.initialSpeed += this.dinoSpeed.speedIncrement;
-
-      this.dino.move(event.keyCode, this.dinoSpeed.initialSpeed);
+      this.moveDinoDown = false;
+      this.dino.moveDinoUp(event.keyCode, this.dinoSpeed.initialSpeed);
     };
 
     document.onkeyup = () => {
       this.dinoSpeed.initialSpeed = 0;
+      this.moveDinoDown = true;
     };
   }
 
@@ -62,18 +64,34 @@ class Game {
 
     this.addCactus();
     this.moveCactus();
+    this.checkClearCactus();
+
+    // this.checkCollision();
 
     this.frames += 1;
 
-    this.updateScore();
+    this.dino.moveDinoDown(this.moveDinoDown);
 
-    window.requestAnimationFrame(() => this.startGame());
+    this.updateScore();
+    if (this.isGameOver) {
+      window.cancelAnimationFrame(this.animationId);
+    } else{
+      this.animationId = window.requestAnimationFrame(() => this.startGame());
+    }
   }
 
   moveCactus() {
     this.cactus.forEach(cactu => {
       cactu.drawCactus();
       cactu.moveCactus(this.runwaySpeed);
+    });
+  }
+
+  checkClearCactus() {
+    this.cactus.forEach((cactus, index) => {
+      if (cactus.posX <= 0) {
+        this.cactus.splice(index, 1);
+      }
     });
   }
 
@@ -84,6 +102,14 @@ class Game {
       ));
     }
   }
+
+  // checkCollision() {
+  //   this.cactus.forEach((cactus) => {
+  //     if (this.dino.crashWith(cactus)) {
+  //       this.isGameOver = true;
+  //     }
+  //   });
+  // }
 
   updateScore() {
     if (this.frames % this.score.pointsIncrementFPS) {
@@ -126,9 +152,9 @@ window.onload = () => {
           const dino = new Dino(
             canvas, context, 64, 220, 65, 72, dinoImg,
           );
-        
+
           const game = new Game(canvas, context, runway, dino, Cactus, cactoImg);
-      
+
           game.configureKeyboardControls();
           game.startGame();
         };

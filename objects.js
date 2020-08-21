@@ -13,9 +13,20 @@ class Object {
     this.width = width;
     this.height = height;
   }
-}
 
-class Runway extends Object {
+//   left() {
+//     return this.posX - this.width;
+//   }
+
+//   right() {
+//     return this.posX;
+//   }
+
+//   crashWith(dino) {
+//     return !(this.right() < dino.left());
+//   }
+// }
+  class Runway extends Object {
   constructor(canvas, context, posX, posY, width, height, image) {
     super(canvas, context, posX, posY, width, height);
     this.image = image;
@@ -57,17 +68,23 @@ class Dino extends Object {
   constructor(canvas, context, posX, posY, width, height, image) {
     super(canvas, context, posX, posY, width, height);
     this.image = image;
+    this.gravity = 5;
   }
 
   drawDino() {
     this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
   }
-
-  moveDino(keyCode, speed) {
-    
+  moveDinoUp(keyCode, speed) {
     switch (keyCode) {
       case 32:
-        console.log('Invalid Key')
+        this.posY -= speed;
+        break;
+      default:
+    }
+  }
+  moveDinoDown(isMovingDown) {
+    if (isMovingDown && this.posY <= 220) {
+      this.posY += this.gravity;
     }
   }
 }
