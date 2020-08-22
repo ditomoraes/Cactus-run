@@ -4,7 +4,7 @@
 // 4 - Create obstacles -> OK
 // 5 - Move the obstacles
 // 6 - Create point dashboard -> OK
-// 7 - Collision logic
+// 7 - Collision logic -> ok
 //  8 - Game over
 
 /* CRAZY DINO
@@ -30,7 +30,7 @@ class Game {
     this.runwaySpeed = 10;
     this.gravity = 0.5;
     this.dinoSpeed = {
-      initialSpeed: 30,
+      initialSpeed: 170,
     };
     this.frames = 0;
     this.score = {
@@ -44,12 +44,12 @@ class Game {
 
   configureKeyboardControls() {
     document.onkeydown = (event) => {
-      this.moveDinoDown = false;
+      // this.moveDinoDown = false;
       this.dino.moveDinoUp(event.keyCode, this.dinoSpeed.initialSpeed);
     };
 
     document.onkeyup = () => {
-      this.dinoSpeed.initialSpeed = 0;
+      // this.dinoSpeed.initialSpeed = 0;
       this.moveDinoDown = true;
     };
   }
@@ -66,7 +66,7 @@ class Game {
     this.moveCactus();
     this.checkClearCactus();
 
-    // this.checkCollision();
+    this.checkCollision();
 
     this.frames += 1;
 
@@ -103,13 +103,13 @@ class Game {
     }
   }
 
-  // checkCollision() {
-  //   this.cactus.forEach((cactus) => {
-  //     if (this.dino.crashWith(cactus)) {
-  //       this.isGameOver = true;
-  //     }
-  //   });
-  // }
+  checkCollision() {
+    this.cactus.forEach((cactus) => {
+      if (this.dino.crashWith(cactus)) {
+        this.isGameOver = true;
+      }
+    });
+  }
 
   updateScore() {
     if (this.frames % this.score.pointsIncrementFPS) {
@@ -135,13 +135,13 @@ window.onload = () => {
     const context = canvas.getContext('2d');
 
     const runwayImg = new Image();
-    runwayImg.src = './Images/Runway.png';
+    runwayImg.src = './src/Images/Runway.png';
 
     const dinoImg = new Image();
-    dinoImg.src = './Images/Cacto 1.png';
+    dinoImg.src = './src/Images/Cacto 1.png';
 
     const cactoImg = new Image();
-    cactoImg.src = './Images/Dino.png';
+    cactoImg.src = './src/Images/Dino.png';
 
     runwayImg.onload = () => {
       dinoImg.onload = () => {
@@ -162,3 +162,4 @@ window.onload = () => {
     };
   };
 };
+

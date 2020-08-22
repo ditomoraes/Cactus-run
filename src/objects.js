@@ -14,18 +14,26 @@ class Object {
     this.height = height;
   }
 
-//   left() {
-//     return this.posX - this.width;
-//   }
+  left() {
+    return this.posX - this.width;
+  }
 
-//   right() {
-//     return this.posX;
-//   }
+  right() {
+    return this.posX;
+  }
 
-//   crashWith(dino) {
-//     return !(this.right() < dino.left());
-//   }
-// }
+  top() {
+    return this.posY;
+  }
+
+  bottom() {
+    return this.posY - this.height;
+  }
+
+  crashWith(dino) {
+    return !(this.right() < dino.left() || this.top() < dino.bottom());
+  }
+}
   class Runway extends Object {
   constructor(canvas, context, posX, posY, width, height, image) {
     super(canvas, context, posX, posY, width, height);
@@ -76,7 +84,8 @@ class Dino extends Object {
   }
   moveDinoUp(keyCode, speed) {
     switch (keyCode) {
-      case 32:
+      case 38:
+        if (this.posY < 130) return;
         this.posY -= speed;
         break;
       default:
