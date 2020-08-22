@@ -119,7 +119,7 @@ class Game {
   }
 
   drawScore() {
-    this.context.font = '20px Comic Sans';
+    this.context.font = '20px Roboto';
     this.context.fillStyle = 'grey';
     this.context.fillText(`SCORE: ${this.score.points}`, 25, 50);
   }
